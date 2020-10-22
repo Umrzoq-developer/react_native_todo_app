@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Navbar from "./src/components/Navbar";
-import MainScreen from './screens/MainScreen';
-import TodoScreen from './screens/TodoScreen';
-
+import MainScreen from "./src/screens/MainScreen";
+import TodoScreen from "./src/screens/TodoScreen";
 
 export default function App() {
   const [todoId, setTodoId] = useState(null);
   const [todos, setTodos] = useState([]);
 
   const handleAddTodo = (title) => {
-
     setTodos((prev) => [
       ...prev,
       {
@@ -21,27 +19,36 @@ export default function App() {
   };
 
   const removeTodo = (id) => {
-    setTodos((prev) => prev.filter(todo => todo.id !== id))
-  }
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
 
   let content = (
     <MainScreen
       removeTodo={removeTodo}
       handleAddTodo={handleAddTodo}
       todos={todos}
+      onOpen={(id) => {
+        setTodoId(id);
+      }}
     />
   );
 
-  if (!todoId) {
-    content = <TodoScreen />
+  if (todoId) {
+    let selectedTodo = todos.find(todo => todo.id === todoId);
+    content = (
+      <TodoScreen
+        todo={selectedTodo}
+        goBack={() => {
+          setTodoId(null);
+        }}
+      />
+    );
   }
 
   return (
     <View>
       <Navbar title="Todo App" />
-      <View style={styles.container}>
-       
-      </View>
+      <View style={styles.container}>{content}</View>
     </View>
   );
 }
