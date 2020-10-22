@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-import AddTodo from "./src/AddTodo";
-import Navbar from "./src/Navbar";
-import Todo from "./src/Todo";
+import { StyleSheet, View } from "react-native";
+import Navbar from "./src/components/Navbar";
+import MainScreen from './screens/MainScreen';
+import TodoScreen from './screens/TodoScreen';
+
 
 export default function App() {
+  const [todoId, setTodoId] = useState(null);
   const [todos, setTodos] = useState([]);
 
   const handleAddTodo = (title) => {
@@ -22,17 +24,23 @@ export default function App() {
     setTodos((prev) => prev.filter(todo => todo.id !== id))
   }
 
+  let content = (
+    <MainScreen
+      removeTodo={removeTodo}
+      handleAddTodo={handleAddTodo}
+      todos={todos}
+    />
+  );
+
+  if (!todoId) {
+    content = <TodoScreen />
+  }
+
   return (
     <View>
       <Navbar title="Todo App" />
       <View style={styles.container}>
-        <AddTodo onSubmit={handleAddTodo} />
-
-        <FlatList
-          keyExtractor={(item) => item.id.toString()}
-          data={todos}
-          renderItem={({ item }) => <Todo todo={item} onRemove={removeTodo} />}
-        />
+       
       </View>
     </View>
   );
