@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ALert, Alert } from "react-native";
 import Navbar from "./src/components/Navbar";
 import MainScreen from "./src/screens/MainScreen";
 import TodoScreen from "./src/screens/TodoScreen";
@@ -19,7 +19,37 @@ export default function App() {
   };
 
   const removeTodo = (id) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    let todo = todos.find((t) => t.id === id);
+    Alert.alert(
+      "Delete file",
+      `Are you sure to delete ${todo.title}?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => {
+            setTodoId(null);
+            setTodos((prev) => prev.filter((todo) => todo.id !== id));
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const updateTodo = (id, title) => {
+    setTodos((old) =>
+      old.map((todo) => {
+        if (todo.id === id) {
+          todo.title = title;
+        }
+
+        return todo;
+      })
+    );
   };
 
   let content = (
@@ -34,13 +64,15 @@ export default function App() {
   );
 
   if (todoId) {
-    let selectedTodo = todos.find(todo => todo.id === todoId);
+    let selectedTodo = todos.find((todo) => todo.id === todoId);
     content = (
       <TodoScreen
+        onRemove={removeTodo}
         todo={selectedTodo}
         goBack={() => {
           setTodoId(null);
         }}
+        onSave={updateTodo}
       />
     );
   }
