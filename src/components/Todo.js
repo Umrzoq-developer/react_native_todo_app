@@ -3,9 +3,13 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 const Todo = ({ todo, onRemove, onOpen }) => {
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={() => onOpen(todo.id)} onLongPress={() => onRemove(todo.id)}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={() => onOpen(todo.id)}
+      onLongPress={() => onRemove(todo.id)}
+    >
       <View style={styles.todo}>
-        <Text>{todo.title}</Text>
+        <Text style={styles.title}>{todo.title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -20,6 +24,9 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     borderRadius: 5,
     marginBottom: 10,
+  },
+  title: {
+    fontFamily: "roboto-bold",
   },
 });
 
